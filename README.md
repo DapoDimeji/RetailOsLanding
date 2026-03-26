@@ -2,7 +2,7 @@
 
 Static landing pages for RetailOS:
 
-- `homepage.html`
+- `index.html`
 - `login.html`
 - `signup.html`
 
@@ -10,7 +10,7 @@ The site is built as plain HTML with Tailwind via CDN, so there is no build step
 
 ## Local Preview
 
-Open `homepage.html` directly in a browser, or serve the folder with any static server.
+Open `index.html` directly in a browser, or serve the folder with any static server.
 
 ## Deploy
 
@@ -28,7 +28,7 @@ This repo uses standalone HTML files, so GitHub Pages can host it as a static si
 5. GitHub Pages will publish the site and provide the live URL.
 
 Note:
-- GitHub Pages serves `index.html` by default. If you want the homepage to open automatically at the root URL, rename `homepage.html` to `index.html`.
+- GitHub Pages serves `index.html` by default, and this repo already uses that filename for the homepage.
 
 ### Vercel
 
@@ -39,7 +39,7 @@ Note:
 5. Output directory: leave empty.
 6. Deploy.
 
-If needed, set `homepage.html` as the main page by renaming it to `index.html`.
+This repo is already ready for root-path deployment with `index.html`.
 
 ### Netlify
 
@@ -50,7 +50,7 @@ If needed, set `homepage.html` as the main page by renaming it to `index.html`.
 5. Publish directory: `.`
 6. Deploy.
 
-If needed, rename `homepage.html` to `index.html` so the root domain loads the homepage directly.
+This repo is already ready for root-path deployment with `index.html`.
 
 ## Notes
 

@@ -1,0 +1,654 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>RetailOS | Retail Management Software for Smarter Stores</title>
+  <meta name="description" content="RetailOS helps Nigerian shops and supermarkets track inventory, reduce sales mistakes, monitor staff activity, and see clear reports from one simple dashboard.">
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      theme: {
+        extend: {
+          colors: {
+            brand: {
+              50: "#eff6ff",
+              100: "#dbeafe",
+              200: "#bfdbfe",
+              300: "#93c5fd",
+              400: "#60a5fa",
+              500: "#3b82f6",
+              600: "#2563eb",
+              700: "#1d4ed8",
+              800: "#1e40af",
+              900: "#1e3a8a"
+            }
+          },
+          boxShadow: {
+            soft: "0 18px 45px rgba(37, 99, 235, 0.08)",
+            glow: "0 24px 70px rgba(37, 99, 235, 0.16)",
+            panel: "0 20px 60px rgba(15, 23, 42, 0.10)"
+          }
+        }
+      }
+    };
+  </script>
+  <style>
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+      text-rendering: optimizeLegibility;
+      -webkit-font-smoothing: antialiased;
+    }
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity 0.7s ease, transform 0.7s ease; }
+    .reveal.is-visible { opacity: 1; transform: translateY(0); }
+    .reveal-delay-1 { transition-delay: 0.08s; }
+    .reveal-delay-2 { transition-delay: 0.16s; }
+    .reveal-delay-3 { transition-delay: 0.24s; }
+    .float-card { animation: floatCard 7s ease-in-out infinite; }
+    .drift-a { animation: driftA 10s ease-in-out infinite alternate; }
+    .drift-b { animation: driftB 12s ease-in-out infinite alternate; }
+    @keyframes floatCard {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-14px); }
+    }
+    @keyframes driftA {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(10px, -18px, 0) scale(1.06); }
+    }
+    @keyframes driftB {
+      0% { transform: translate3d(0, 0, 0) scale(1); }
+      100% { transform: translate3d(-8px, 14px, 0) scale(1.08); }
+    }
+  </style>
+</head>
+<body class="bg-white text-slate-900 antialiased">
+  <div class="relative overflow-hidden">
+    <div class="absolute inset-0 bg-[linear-gradient(180deg,#f8fbff_0%,#eef5ff_22%,#ffffff_50%,#ffffff_100%)]"></div>
+    <div class="drift-a absolute -left-24 top-16 h-80 w-80 rounded-full bg-brand-200/60 blur-3xl"></div>
+    <div class="drift-b absolute right-0 top-8 h-96 w-96 rounded-full bg-sky-200/60 blur-3xl"></div>
+    <div class="absolute inset-x-0 top-0 h-[42rem] bg-[linear-gradient(to_right,rgba(59,130,246,0.08)_1px,transparent_1px),linear-gradient(to_bottom,rgba(59,130,246,0.08)_1px,transparent_1px)] bg-[size:42px_42px]"></div>
+
+    <header class="sticky top-0 z-30 border-b border-brand-100/80 bg-white/80 backdrop-blur-xl">
+      <nav class="mx-auto flex max-w-7xl items-center justify-between px-6 py-4 lg:px-8">
+        <a href="#top" class="flex items-center gap-3">
+          <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-sky-400 text-white shadow-glow">
+            <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+              <path d="M4 7h16"></path>
+              <path d="M6 7l1.4-3h9.2L18 7"></path>
+              <path d="M6 7v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7"></path>
+              <path d="M10 11h4"></path>
+            </svg>
+          </span>
+          <div>
+            <div class="text-lg font-semibold tracking-tight text-slate-950">RetailOS</div>
+            <div class="text-xs text-slate-500">Retail operations system</div>
+          </div>
+        </a>
+
+        <div class="hidden items-center gap-8 md:flex">
+          <a href="#features" class="text-sm font-medium text-slate-600 transition hover:text-brand-700">Features</a>
+          <a href="#how-it-works" class="text-sm font-medium text-slate-600 transition hover:text-brand-700">How it Works</a>
+          <a href="#product" class="text-sm font-medium text-slate-600 transition hover:text-brand-700">Product</a>
+          <a href="#pricing" class="text-sm font-medium text-slate-600 transition hover:text-brand-700">Pricing</a>
+          <a href="#faq" class="text-sm font-medium text-slate-600 transition hover:text-brand-700">FAQ</a>
+        </div>
+
+        <div class="flex items-center gap-3">
+          <div class="hidden rounded-full border border-brand-200 bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700 lg:block">
+            Trusted by 500+ businesses
+          </div>
+          <a href="https://wa.me/2348139535071" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-full bg-brand-600 px-5 py-3 text-sm font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-brand-700">
+            Get Started
+          </a>
+        </div>
+      </nav>
+    </header>
+
+    <main id="top" class="relative z-10">
+      <section class="mx-auto max-w-7xl px-6 pb-24 pt-12 lg:px-8 lg:pb-28 lg:pt-16">
+        <div class="grid items-center gap-14 lg:grid-cols-[minmax(0,0.92fr)_minmax(0,1.08fr)]">
+          <div class="reveal">
+            <div class="mb-5 inline-flex items-center gap-2 rounded-full border border-brand-200 bg-white px-4 py-2 text-sm font-medium text-brand-700 shadow-soft">
+              <span class="h-2.5 w-2.5 rounded-full bg-emerald-500"></span>
+              Built for shops, supermarkets, and POS operators
+            </div>
+
+            <h1 class="max-w-3xl text-5xl font-semibold tracking-tight text-slate-950 sm:text-6xl lg:text-[4.4rem] lg:leading-[0.98]">
+              Run Your Store Smarter with <span class="text-brand-600">RetailOS</span>
+            </h1>
+            <p class="mt-6 max-w-2xl text-lg leading-8 text-slate-600 sm:text-[1.1rem]">
+              Track stock, reduce sales mistakes, manage staff access, and see clear daily reports from one simple retail dashboard.
+            </p>
+
+            <div class="mt-8 flex flex-col gap-4 sm:flex-row">
+              <a href="https://wa.me/2348139535071" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-full bg-brand-600 px-6 py-3.5 text-sm font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-brand-700">
+                Start Free
+              </a>
+              <a href="https://wa.me/2348139535071" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-full border border-brand-200 bg-white px-6 py-3.5 text-sm font-semibold text-brand-700 shadow-soft transition hover:-translate-y-0.5 hover:border-brand-300 hover:bg-brand-50">
+                Book Demo
+              </a>
+            </div>
+
+            <div class="mt-6 flex flex-wrap items-center gap-4 text-sm text-slate-500">
+              <div class="font-semibold text-slate-900">Trusted by 500+ businesses</div>
+              <div>Works offline</div>
+              <div>Low data usage</div>
+            </div>
+
+            <div class="mt-10 grid max-w-xl grid-cols-3 gap-6 border-t border-brand-100 pt-8">
+              <div>
+                <div class="text-2xl font-semibold tracking-tight text-slate-950">1,200+</div>
+                <div class="mt-1 text-sm text-slate-500">Active stores</div>
+              </div>
+              <div>
+                <div class="text-2xl font-semibold tracking-tight text-slate-950">NGN 8.4M+</div>
+                <div class="mt-1 text-sm text-slate-500">Monthly sales tracked</div>
+              </div>
+              <div>
+                <div class="text-2xl font-semibold tracking-tight text-slate-950">99.9%</div>
+                <div class="mt-1 text-sm text-slate-500">Platform uptime</div>
+              </div>
+            </div>
+          </div>
+
+          <div class="reveal reveal-delay-1">
+            <div class="mx-auto max-w-3xl rounded-[2rem] border border-brand-100 bg-white p-4 shadow-panel">
+              <div class="overflow-hidden rounded-[1.5rem] border border-brand-100 bg-white">
+                <div class="flex items-center justify-between border-b border-brand-100 px-5 py-4">
+                  <div class="flex items-center gap-2">
+                    <span class="h-3 w-3 rounded-full bg-rose-400"></span>
+                    <span class="h-3 w-3 rounded-full bg-amber-400"></span>
+                    <span class="h-3 w-3 rounded-full bg-emerald-400"></span>
+                  </div>
+                  <div class="rounded-full bg-brand-50 px-4 py-1 text-xs font-medium text-slate-500">dashboard.retailos.app</div>
+                </div>
+
+                <div class="grid gap-4 p-5 lg:grid-cols-[220px_minmax(0,1fr)]">
+                  <aside class="rounded-2xl bg-slate-950 p-4 text-white">
+                    <div class="flex items-center gap-3">
+                      <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-sky-400 text-sm font-bold">R</div>
+                      <div>
+                        <div class="text-sm font-semibold">RetailOS</div>
+                        <div class="text-xs text-slate-400">Main Branch</div>
+                      </div>
+                    </div>
+                    <div class="mt-6 space-y-2 text-sm text-slate-300">
+                      <div class="rounded-xl bg-white/10 px-3 py-2 text-white">Overview</div>
+                      <div class="rounded-xl px-3 py-2">Point of Sale</div>
+                      <div class="rounded-xl px-3 py-2">Inventory</div>
+                      <div class="rounded-xl px-3 py-2">Reports</div>
+                    </div>
+                  </aside>
+
+                  <div class="space-y-4">
+                    <div class="grid gap-4 sm:grid-cols-3">
+                      <div class="rounded-2xl bg-brand-50 p-4">
+                        <div class="text-sm text-slate-500">Transactions</div>
+                        <div class="mt-2 text-2xl font-semibold text-slate-950">312</div>
+                      </div>
+                      <div class="rounded-2xl bg-brand-50 p-4">
+                        <div class="text-sm text-slate-500">Low stock items</div>
+                        <div class="mt-2 text-2xl font-semibold text-slate-950">14</div>
+                      </div>
+                      <div class="rounded-2xl bg-brand-50 p-4">
+                        <div class="text-sm text-slate-500">Active staff</div>
+                        <div class="mt-2 text-2xl font-semibold text-slate-950">9</div>
+                      </div>
+                    </div>
+
+                    <div class="rounded-3xl border border-brand-100 p-5">
+                      <div class="flex items-center justify-between">
+                        <div>
+                          <div class="text-sm font-medium text-slate-500">Sales overview</div>
+                          <div class="mt-1 text-xl font-semibold text-slate-900">Daily sales trend</div>
+                        </div>
+                        <div class="rounded-full bg-brand-50 px-3 py-1 text-xs font-semibold text-brand-700">Live</div>
+                      </div>
+                      <div class="mt-6 flex h-44 items-end gap-3">
+                        <div class="w-full rounded-t-2xl bg-brand-200" style="height:38%"></div>
+                        <div class="w-full rounded-t-2xl bg-brand-300" style="height:54%"></div>
+                        <div class="w-full rounded-t-2xl bg-brand-400" style="height:46%"></div>
+                        <div class="w-full rounded-t-2xl bg-brand-500" style="height:72%"></div>
+                        <div class="w-full rounded-t-2xl bg-sky-300" style="height:60%"></div>
+                        <div class="w-full rounded-t-2xl bg-brand-600" style="height:86%"></div>
+                        <div class="w-full rounded-t-2xl bg-sky-500" style="height:78%"></div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="features" class="bg-white py-28 text-slate-900">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+          <div class="reveal mb-10 flex flex-wrap items-center justify-center gap-3 text-center">
+            <div class="rounded-full bg-brand-50 px-4 py-2 text-sm font-semibold text-brand-700 shadow-soft">Trusted by 500+ businesses</div>
+            <div class="rounded-full bg-brand-50 px-4 py-2 text-sm font-semibold text-brand-700 shadow-soft">Used by shops in Lagos, Abuja, Enugu, and Ibadan</div>
+            <div class="rounded-full bg-brand-50 px-4 py-2 text-sm font-semibold text-brand-700 shadow-soft">Works offline and uses low data</div>
+          </div>
+
+          <div class="mx-auto max-w-3xl text-center reveal">
+            <div class="inline-flex rounded-full bg-brand-50 px-4 py-2 text-sm font-semibold text-brand-700">Core Features</div>
+            <h2 class="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">The tools shop owners need to stay in control every day</h2>
+            <p class="mt-5 text-lg leading-8 text-slate-600">
+              RetailOS helps you prevent stock confusion, reduce cashier mistakes, track every sale properly, and see clear reports without waiting for an accountant or spreadsheet.
+            </p>
+          </div>
+
+          <div class="mt-16 grid gap-6 md:grid-cols-2 xl:grid-cols-4">
+            <article class="rounded-3xl border border-brand-100 bg-brand-50/50 p-8 shadow-soft reveal">
+              <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-brand-100 text-brand-700">
+                <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 6h18"></path>
+                  <path d="M7 6V4h10v2"></path>
+                  <rect x="4" y="6" width="16" height="14" rx="2"></rect>
+                  <path d="M9 12h6"></path>
+                </svg>
+              </div>
+              <h3 class="mt-6 text-xl font-semibold">Simple POS</h3>
+              <p class="mt-3 text-sm leading-7 text-slate-600">Sell fast, print receipts, and reduce pricing or payment mistakes during busy hours.</p>
+            </article>
+
+            <article class="rounded-3xl border border-brand-100 bg-brand-50/50 p-8 shadow-soft reveal reveal-delay-1">
+              <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-sky-100 text-sky-700">
+                <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M3 7.5 12 3l9 4.5-9 4.5-9-4.5Z"></path>
+                  <path d="M3 12.5 12 17l9-4.5"></path>
+                  <path d="M3 17 12 21l9-4"></path>
+                </svg>
+              </div>
+              <h3 class="mt-6 text-xl font-semibold">Inventory Management</h3>
+              <p class="mt-3 text-sm leading-7 text-slate-600">Know what is in your shop, what is running low, and what may be missing before it becomes a loss.</p>
+            </article>
+
+            <article class="rounded-3xl border border-brand-100 bg-brand-50/50 p-8 shadow-soft reveal reveal-delay-2">
+              <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-emerald-100 text-emerald-700">
+                <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M4 19h16"></path>
+                  <path d="M7 16V9"></path>
+                  <path d="M12 16V5"></path>
+                  <path d="M17 16v-4"></path>
+                </svg>
+              </div>
+              <h3 class="mt-6 text-xl font-semibold">Sales and Reports</h3>
+              <p class="mt-3 text-sm leading-7 text-slate-600">See daily sales, top products, weak periods, and end-of-day totals in a report you can actually understand.</p>
+            </article>
+
+            <article class="rounded-3xl border border-brand-100 bg-brand-50/50 p-8 shadow-soft reveal reveal-delay-3">
+              <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-indigo-100 text-indigo-700">
+                <svg viewBox="0 0 24 24" class="h-6 w-6" fill="none" stroke="currentColor" stroke-width="2">
+                  <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2"></path>
+                  <circle cx="9" cy="7" r="4"></circle>
+                  <path d="M22 21v-2a4 4 0 0 0-3-3.87"></path>
+                  <path d="M16 3.13a4 4 0 0 1 0 7.75"></path>
+                </svg>
+              </div>
+              <h3 class="mt-6 text-xl font-semibold">Staff Roles and Control</h3>
+              <p class="mt-3 text-sm leading-7 text-slate-600">Control what admin, manager, and cashier can access so one person cannot change everything.</p>
+            </article>
+          </div>
+        </div>
+      </section>
+
+      <section id="how-it-works" class="bg-brand-50/60 py-28 text-slate-900">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+          <div class="mx-auto max-w-3xl text-center reveal">
+            <div class="inline-flex rounded-full bg-white px-4 py-2 text-sm font-semibold text-brand-700 shadow-soft">How it works</div>
+            <h2 class="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">Start using RetailOS without changing how your shop already works</h2>
+          </div>
+
+          <div class="mt-16 grid gap-6 lg:grid-cols-3">
+            <div class="rounded-3xl border border-brand-100 bg-white p-8 shadow-soft reveal">
+              <div class="flex h-12 w-12 items-center justify-center rounded-full bg-brand-600 text-lg font-semibold text-white">1</div>
+              <h3 class="mt-6 text-2xl font-semibold">Add your products and prices</h3>
+              <p class="mt-4 leading-7 text-slate-600">Set up your items, stock quantity, and selling price so your team stops guessing at the counter.</p>
+            </div>
+
+            <div class="rounded-3xl border border-brand-100 bg-white p-8 shadow-soft reveal reveal-delay-1">
+              <div class="flex h-12 w-12 items-center justify-center rounded-full bg-sky-600 text-lg font-semibold text-white">2</div>
+              <h3 class="mt-6 text-2xl font-semibold">Assign staff roles</h3>
+              <p class="mt-4 leading-7 text-slate-600">Give each worker the right access level so cashiers sell, managers monitor, and owners stay in control.</p>
+            </div>
+
+            <div class="rounded-3xl border border-brand-100 bg-white p-8 shadow-soft reveal reveal-delay-2">
+              <div class="flex h-12 w-12 items-center justify-center rounded-full bg-indigo-600 text-lg font-semibold text-white">3</div>
+              <h3 class="mt-6 text-2xl font-semibold">Sell and review every day</h3>
+              <p class="mt-4 leading-7 text-slate-600">Track sales, watch stock movement, and check reports daily to reduce leakages and improve profit.</p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="product" class="bg-white py-28 text-slate-900">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+          <div class="grid items-center gap-12 lg:grid-cols-[0.95fr_1.05fr]">
+            <div class="reveal">
+              <div class="inline-flex rounded-full bg-brand-50 px-4 py-2 text-sm font-semibold text-brand-700">Product Preview</div>
+              <h2 class="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">A dashboard that shows you what is happening in your shop</h2>
+              <p class="mt-5 text-lg leading-8 text-slate-600">
+                Check sales, stock, cashier activity, and problem areas from one place. RetailOS is built to stay clear, even on busy market days with weak network or limited data.
+              </p>
+              <div class="mt-8 space-y-4">
+                <div class="flex gap-4 rounded-2xl border border-brand-100 bg-brand-50/50 p-4 shadow-soft">
+                  <div class="mt-1 h-3 w-3 rounded-full bg-brand-500"></div>
+                  <div>
+                    <div class="font-semibold">Clear daily performance</div>
+                    <div class="mt-1 text-sm text-slate-600">See your transactions, revenue, and stock status without checking multiple books or apps.</div>
+                  </div>
+                </div>
+                <div class="flex gap-4 rounded-2xl border border-brand-100 bg-brand-50/50 p-4 shadow-soft">
+                  <div class="mt-1 h-3 w-3 rounded-full bg-sky-500"></div>
+                  <div>
+                    <div class="font-semibold">Controlled staff access</div>
+                    <div class="mt-1 text-sm text-slate-600">Admins manage settings, managers supervise, and cashiers focus on selling only what they should.</div>
+                  </div>
+                </div>
+                <div class="flex gap-4 rounded-2xl border border-brand-100 bg-brand-50/50 p-4 shadow-soft">
+                  <div class="mt-1 h-3 w-3 rounded-full bg-emerald-500"></div>
+                  <div>
+                    <div class="font-semibold">Reports that help you act fast</div>
+                    <div class="mt-1 text-sm text-slate-600">Spot unusual sales, low stock, and possible leakages before they become bigger problems.</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="reveal reveal-delay-1">
+              <div class="rounded-[2rem] border border-brand-100 bg-brand-50/60 p-4 shadow-panel">
+                <div class="overflow-hidden rounded-[1.5rem] border border-brand-100 bg-white">
+                  <div class="flex items-center justify-between border-b border-brand-100 px-5 py-4">
+                    <div class="flex items-center gap-2">
+                      <span class="h-3 w-3 rounded-full bg-rose-400"></span>
+                      <span class="h-3 w-3 rounded-full bg-amber-400"></span>
+                      <span class="h-3 w-3 rounded-full bg-emerald-400"></span>
+                    </div>
+                    <div class="rounded-full bg-brand-50 px-4 py-1 text-xs font-medium text-slate-500">app.retailos.ng/dashboard</div>
+                  </div>
+
+                  <div class="grid lg:grid-cols-[220px_minmax(0,1fr)]">
+                    <aside class="border-b border-brand-100 bg-slate-950 px-4 py-5 text-white lg:border-b-0 lg:border-r lg:border-r-brand-100/20">
+                      <div class="flex items-center gap-3">
+                        <div class="flex h-10 w-10 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-sky-400 text-sm font-bold">R</div>
+                        <div>
+                          <div class="text-sm font-semibold">RetailOS</div>
+                          <div class="text-xs text-slate-400">Yaba Main Store</div>
+                        </div>
+                      </div>
+                      <nav class="mt-6 space-y-2 text-sm">
+                        <div class="rounded-2xl bg-white/10 px-4 py-3 font-medium text-white">Dashboard</div>
+                        <div class="rounded-2xl px-4 py-3 text-slate-300">Point of Sale</div>
+                        <div class="rounded-2xl px-4 py-3 text-slate-300">Inventory</div>
+                        <div class="rounded-2xl px-4 py-3 text-slate-300">Sales</div>
+                        <div class="rounded-2xl px-4 py-3 text-slate-300">Reports</div>
+                        <div class="rounded-2xl px-4 py-3 text-slate-300">Staff Roles</div>
+                      </nav>
+                      <div class="mt-8 rounded-2xl border border-white/10 bg-white/5 p-4">
+                        <div class="text-xs uppercase tracking-[0.18em] text-slate-400">Sync status</div>
+                        <div class="mt-2 text-sm font-semibold text-white">Offline mode ready</div>
+                        <div class="mt-1 text-xs text-slate-400">Last sync 1 minute ago</div>
+                      </div>
+                    </aside>
+
+                    <div class="bg-brand-50/50 p-5">
+                      <div class="flex flex-wrap items-center justify-between gap-4">
+                        <div>
+                          <div class="text-sm font-medium text-slate-500">Store dashboard</div>
+                          <div class="mt-1 text-2xl font-semibold text-slate-900">Monday operations overview</div>
+                        </div>
+                        <div class="flex items-center gap-3">
+                          <div class="rounded-full bg-emerald-100 px-3 py-1 text-xs font-semibold text-emerald-700">Store open</div>
+                          <div class="rounded-full bg-brand-100 px-3 py-1 text-xs font-semibold text-brand-700">Low data mode</div>
+                        </div>
+                      </div>
+
+                      <div class="mt-5 grid gap-4 sm:grid-cols-3">
+                        <div class="rounded-2xl bg-slate-950 p-4 text-white shadow-soft">
+                          <div class="text-sm text-slate-400">Sales today</div>
+                          <div class="mt-2 text-2xl font-semibold">NGN 842,000</div>
+                          <div class="mt-1 text-xs text-emerald-400">178 completed sales</div>
+                        </div>
+                        <div class="rounded-2xl bg-white p-4 ring-1 ring-brand-100 shadow-soft">
+                          <div class="text-sm text-slate-500">Low stock</div>
+                          <div class="mt-2 text-2xl font-semibold text-slate-900">12 items</div>
+                          <div class="mt-1 text-xs text-amber-600">Restock needed</div>
+                        </div>
+                        <div class="rounded-2xl bg-white p-4 ring-1 ring-brand-100 shadow-soft">
+                          <div class="text-sm text-slate-500">Cashier activity</div>
+                          <div class="mt-2 text-2xl font-semibold text-slate-900">4 online</div>
+                          <div class="mt-1 text-xs text-brand-700">2 managers, 2 cashiers</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="testimonials" class="bg-brand-50/60 py-28 text-slate-900">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+          <div class="mx-auto max-w-3xl text-center reveal">
+            <div class="inline-flex rounded-full bg-white px-4 py-2 text-sm font-semibold text-brand-700 shadow-soft">Testimonials</div>
+            <h2 class="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">Used by shop owners who want fewer mistakes and tighter control</h2>
+          </div>
+
+          <div class="mt-16 grid gap-6 lg:grid-cols-3">
+            <figure class="rounded-3xl border border-brand-100 bg-white p-8 shadow-soft reveal">
+              <blockquote class="text-lg leading-8 text-slate-700">"Before RetailOS, we were always arguing about stock balance. Now I can quickly see what was sold, what is remaining, and where the shortage started."</blockquote>
+              <figcaption class="mt-8">
+                <div class="font-semibold text-slate-900">Chioma Okafor</div>
+                <div class="text-sm text-slate-500">Owner, family supermarket in Enugu</div>
+              </figcaption>
+            </figure>
+            <figure class="rounded-3xl border border-brand-100 bg-white p-8 shadow-soft reveal reveal-delay-1">
+              <blockquote class="text-lg leading-8 text-slate-700">"My POS operators picked it up quickly. Sales errors dropped, and I no longer wait till night before I know how the business performed."</blockquote>
+              <figcaption class="mt-8">
+                <div class="font-semibold text-slate-900">Sodiq Bello</div>
+                <div class="text-sm text-slate-500">Manager, mini mart in Lagos</div>
+              </figcaption>
+            </figure>
+            <figure class="rounded-3xl border border-brand-100 bg-white p-8 shadow-soft reveal reveal-delay-2">
+              <blockquote class="text-lg leading-8 text-slate-700">"The reports helped us notice missing items and unusual discounts early. That alone saved us money in the first few weeks."</blockquote>
+              <figcaption class="mt-8">
+                <div class="font-semibold text-slate-900">Amaka Eze</div>
+                <div class="text-sm text-slate-500">Owner, neighbourhood store in Abuja</div>
+              </figcaption>
+            </figure>
+          </div>
+        </div>
+      </section>
+
+      <section id="pricing" class="bg-white py-28 text-slate-900">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+          <div class="mx-auto max-w-3xl text-center reveal">
+            <div class="inline-flex rounded-full bg-brand-50 px-4 py-2 text-sm font-semibold text-brand-700">Pricing</div>
+            <h2 class="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">Simple pricing in naira for shops, supermarkets, and SMEs</h2>
+            <p class="mt-5 text-lg leading-8 text-slate-600">Choose the plan that fits your business today. Start with an SME-friendly plan and upgrade when you need more users, branches, or deeper reporting.</p>
+            <div class="mt-5 inline-flex rounded-full border border-amber-200 bg-amber-50 px-4 py-2 text-sm font-semibold text-amber-800 shadow-soft">
+              Limited-time onboarding support included for new signups
+            </div>
+          </div>
+
+          <div class="mt-16 grid gap-6 lg:grid-cols-3">
+            <div class="rounded-3xl border border-brand-100 bg-brand-50/50 p-8 shadow-soft reveal">
+              <div class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">SME</div>
+              <div class="mt-5 flex items-end gap-2"><div class="text-5xl font-semibold tracking-tight">NGN 15,000</div><div class="pb-2 text-slate-500">/ month</div></div>
+              <p class="mt-4 text-sm leading-7 text-slate-600">For small shops and SMEs that want better sales records and tighter stock control without extra complexity.</p>
+              <ul class="mt-8 space-y-4 text-sm text-slate-700">
+                <li class="flex gap-3"><span class="text-emerald-500">+</span><span>POS checkout</span></li>
+                <li class="flex gap-3"><span class="text-emerald-500">+</span><span>Inventory tracking</span></li>
+                <li class="flex gap-3"><span class="text-emerald-500">+</span><span>Basic sales reports</span></li>
+                <li class="flex gap-3"><span class="text-emerald-500">+</span><span>Works offline with low data usage</span></li>
+              </ul>
+              <a href="https://wa.me/2348139535071" target="_blank" rel="noopener noreferrer" class="mt-10 inline-flex w-full items-center justify-center rounded-full border border-brand-200 bg-white px-5 py-3 text-sm font-semibold text-brand-700 shadow-soft transition hover:-translate-y-0.5 hover:bg-brand-50">Choose SME</a>
+            </div>
+
+            <div class="rounded-3xl border border-brand-200 bg-slate-950 p-8 text-white shadow-glow reveal reveal-delay-1">
+              <div class="flex items-center justify-between gap-4">
+                <div class="text-sm font-semibold uppercase tracking-[0.18em] text-brand-300">Pro</div>
+                <div class="rounded-full bg-brand-500/20 px-3 py-1 text-xs font-semibold text-brand-200">Most Popular</div>
+              </div>
+              <div class="mt-5 flex items-end gap-2"><div class="text-5xl font-semibold tracking-tight">NGN 35,000</div><div class="pb-2 text-slate-400">/ month</div></div>
+              <p class="mt-4 text-sm leading-7 text-slate-300">For busy supermarkets and growing stores that need better reports, stronger controls, and tighter staff monitoring.</p>
+              <ul class="mt-8 space-y-4 text-sm text-slate-200">
+                <li class="flex gap-3"><span class="text-emerald-400">+</span><span>Everything in SME</span></li>
+                <li class="flex gap-3"><span class="text-emerald-400">+</span><span>Advanced reports and analytics</span></li>
+                <li class="flex gap-3"><span class="text-emerald-400">+</span><span>Admin, manager, cashier roles</span></li>
+                <li class="flex gap-3"><span class="text-emerald-400">+</span><span>Better control against leakages</span></li>
+              </ul>
+              <a href="https://wa.me/2348139535071" target="_blank" rel="noopener noreferrer" class="mt-10 inline-flex w-full items-center justify-center rounded-full bg-gradient-to-r from-brand-500 to-sky-500 px-5 py-3 text-sm font-semibold text-white shadow-glow transition hover:-translate-y-0.5 hover:from-brand-600 hover:to-sky-600">Choose Pro</a>
+            </div>
+
+            <div class="rounded-3xl border border-brand-100 bg-brand-50/50 p-8 shadow-soft reveal reveal-delay-2">
+              <div class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Enterprise</div>
+              <div class="mt-5 flex items-end gap-2"><div class="text-5xl font-semibold tracking-tight">Custom</div></div>
+              <p class="mt-4 text-sm leading-7 text-slate-600">For multi-branch retail businesses that need central control, deeper visibility, and dedicated support.</p>
+              <ul class="mt-8 space-y-4 text-sm text-slate-700">
+                <li class="flex gap-3"><span class="text-emerald-500">+</span><span>Unlimited users</span></li>
+                <li class="flex gap-3"><span class="text-emerald-500">+</span><span>Multi-store management</span></li>
+                <li class="flex gap-3"><span class="text-emerald-500">+</span><span>Custom onboarding</span></li>
+                <li class="flex gap-3"><span class="text-emerald-500">+</span><span>Priority support</span></li>
+              </ul>
+              <a href="https://wa.me/2348139535071" target="_blank" rel="noopener noreferrer" class="mt-10 inline-flex w-full items-center justify-center rounded-full border border-brand-200 bg-white px-5 py-3 text-sm font-semibold text-brand-700 shadow-soft transition hover:-translate-y-0.5 hover:bg-brand-50">Contact Sales</a>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section id="faq" class="bg-brand-50/60 py-28 text-slate-900">
+        <div class="mx-auto max-w-7xl px-6 lg:px-8">
+          <div class="mx-auto max-w-3xl text-center reveal">
+            <div class="inline-flex rounded-full bg-white px-4 py-2 text-sm font-semibold text-brand-700 shadow-soft">FAQ</div>
+            <h2 class="mt-6 text-4xl font-semibold tracking-tight sm:text-5xl">Questions shop owners usually ask before switching</h2>
+            <p class="mt-5 text-lg leading-8 text-slate-600">
+              Clear answers help remove doubt. This section handles the common objections around setup, offline use, staff control, and daily operations.
+            </p>
+          </div>
+
+          <div class="mx-auto mt-16 grid max-w-4xl gap-5">
+            <details class="rounded-3xl border border-brand-100 bg-white p-6 shadow-soft reveal" open>
+              <summary class="cursor-pointer list-none text-lg font-semibold text-slate-900">Can RetailOS work if my internet is unstable?</summary>
+              <p class="mt-4 leading-7 text-slate-600">Yes. RetailOS is built to support offline use for day-to-day selling, with low data usage when the network is available again.</p>
+            </details>
+            <details class="rounded-3xl border border-brand-100 bg-white p-6 shadow-soft reveal reveal-delay-1">
+              <summary class="cursor-pointer list-none text-lg font-semibold text-slate-900">Will my cashiers and managers have different access?</summary>
+              <p class="mt-4 leading-7 text-slate-600">Yes. You can assign admin, manager, and cashier roles so each person only sees the tools and actions they need.</p>
+            </details>
+            <details class="rounded-3xl border border-brand-100 bg-white p-6 shadow-soft reveal reveal-delay-2">
+              <summary class="cursor-pointer list-none text-lg font-semibold text-slate-900">Can this help reduce stock loss and leakages?</summary>
+              <p class="mt-4 leading-7 text-slate-600">That is one of the main reasons stores use RetailOS. Better stock tracking, clearer reports, and stronger role control make unusual movement easier to catch early.</p>
+            </details>
+            <details class="rounded-3xl border border-brand-100 bg-white p-6 shadow-soft reveal reveal-delay-3">
+              <summary class="cursor-pointer list-none text-lg font-semibold text-slate-900">How long does setup take?</summary>
+              <p class="mt-4 leading-7 text-slate-600">Most stores can start quickly once products and prices are ready. New signups also get setup support during the current onboarding offer.</p>
+            </details>
+          </div>
+        </div>
+      </section>
+
+      <section id="final-cta" class="bg-[linear-gradient(180deg,#f8fbff_0%,#eef5ff_100%)] py-28 text-slate-900">
+        <div class="mx-auto max-w-5xl px-6 text-center lg:px-8">
+          <div class="reveal rounded-[2rem] border border-brand-100 bg-white px-8 py-16 shadow-panel">
+            <div class="mx-auto inline-flex rounded-full border border-brand-200 bg-brand-50 px-4 py-2 text-sm font-semibold text-brand-700">Ready to run your shop with better control?</div>
+            <h2 class="mx-auto mt-6 max-w-3xl text-4xl font-semibold tracking-tight sm:text-5xl">
+              Bring your sales, stock, staff, and reports into one simple system
+            </h2>
+            <p class="mx-auto mt-5 max-w-2xl text-lg leading-8 text-slate-600">
+              Use RetailOS to reduce sales mistakes, track stock properly, spot leakages early, and keep your business running even with low data or unstable internet.
+            </p>
+            <div class="mt-10 flex flex-col justify-center gap-4 sm:flex-row">
+              <a href="https://wa.me/2348139535071" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-full bg-brand-600 px-6 py-3.5 text-sm font-semibold text-white shadow-soft transition hover:-translate-y-0.5 hover:bg-brand-700">Start Free</a>
+              <a href="https://wa.me/2348139535071" target="_blank" rel="noopener noreferrer" class="inline-flex items-center justify-center rounded-full border border-brand-200 bg-white px-6 py-3.5 text-sm font-semibold text-brand-700 shadow-soft transition hover:-translate-y-0.5 hover:border-brand-300 hover:bg-brand-50">Book Demo</a>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+
+    <footer class="relative z-10 border-t border-brand-100 bg-[linear-gradient(180deg,#ffffff_0%,#f8fbff_100%)]">
+      <div class="mx-auto grid max-w-7xl gap-12 px-6 py-16 lg:grid-cols-[1.25fr_repeat(3,0.75fr)] lg:px-8">
+        <div>
+          <a href="#top" class="flex items-center gap-3">
+            <span class="flex h-11 w-11 items-center justify-center rounded-2xl bg-gradient-to-br from-brand-500 to-sky-400 text-white shadow-soft">
+              <svg viewBox="0 0 24 24" class="h-5 w-5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                <path d="M4 7h16"></path>
+                <path d="M6 7l1.4-3h9.2L18 7"></path>
+                <path d="M6 7v10a2 2 0 0 0 2 2h8a2 2 0 0 0 2-2V7"></path>
+                <path d="M10 11h4"></path>
+              </svg>
+            </span>
+            <div>
+              <div class="text-lg font-semibold text-slate-950">RetailOS</div>
+              <div class="text-sm text-slate-500">Retail management system</div>
+            </div>
+          </a>
+          <p class="mt-5 max-w-sm text-sm leading-7 text-slate-600">
+            Practical software for Nigerian shops, supermarkets, and POS operators that need cleaner sales records, better stock control, and clearer reports every day.
+          </p>
+          <div class="mt-6 flex flex-wrap gap-3 text-sm">
+            <div class="rounded-full border border-brand-200 bg-brand-50 px-3 py-1.5 font-medium text-brand-700">Trusted by 500+ businesses</div>
+            <div class="rounded-full border border-brand-100 bg-white px-3 py-1.5 text-slate-600">Works offline</div>
+            <div class="rounded-full border border-brand-100 bg-white px-3 py-1.5 text-slate-600">Low data usage</div>
+          </div>
+        </div>
+
+        <div>
+          <h3 class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Product</h3>
+          <ul class="mt-5 space-y-3 text-sm text-slate-600">
+            <li><a href="#features" class="transition hover:text-brand-700">Features</a></li>
+            <li><a href="#product" class="transition hover:text-brand-700">Dashboard preview</a></li>
+            <li><a href="#pricing" class="transition hover:text-brand-700">Pricing</a></li>
+            <li><a href="#faq" class="transition hover:text-brand-700">FAQ</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Company</h3>
+          <ul class="mt-5 space-y-3 text-sm text-slate-600">
+            <li><a href="#testimonials" class="transition hover:text-brand-700">Customer stories</a></li>
+            <li><a href="#how-it-works" class="transition hover:text-brand-700">How it works</a></li>
+            <li><a href="login.html" class="transition hover:text-brand-700">Sign in</a></li>
+            <li><a href="signup.html" class="transition hover:text-brand-700">Create account</a></li>
+          </ul>
+        </div>
+
+        <div>
+          <h3 class="text-sm font-semibold uppercase tracking-[0.18em] text-slate-500">Contact</h3>
+          <ul class="mt-5 space-y-3 text-sm text-slate-600">
+            <li><a href="mailto:hello@retailos.app" class="transition hover:text-brand-700">hello@retailos.app</a></li>
+            <li><a href="tel:+2348000000000" class="transition hover:text-brand-700">+234 800 000 0000</a></li>
+            <li><span>Lagos support team</span></li>
+            <li><a href="https://wa.me/2348139535071" target="_blank" rel="noopener noreferrer" class="font-semibold text-brand-700 transition hover:text-brand-800">Book a demo</a></li>
+          </ul>
+        </div>
+      </div>
+      <div class="border-t border-brand-100">
+        <div class="mx-auto flex max-w-7xl flex-col gap-3 px-6 py-6 text-sm text-slate-500 sm:flex-row sm:items-center sm:justify-between lg:px-8">
+          <div>&copy; 2026 RetailOS. All rights reserved.</div>
+          <div>Built for everyday retail work across shops, supermarkets, and POS counters.</div>
+        </div>
+      </div>
+    </footer>
+  </div>
+
+  <script>
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach((entry) => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add("is-visible");
+        }
+      });
+    }, { threshold: 0.15 });
+
+    document.querySelectorAll(".reveal").forEach((element) => {
+      observer.observe(element);
+    });
+  </script>
+</body>
+</html>
